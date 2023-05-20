@@ -4,7 +4,8 @@
  * Description: This program implements a simple shell where it displays a
  * prompt, reads user input, and executes commands entered by the user. It
  * supports basic functionality such as executing built-in commands, handling
- * the "exit" command, and displaying the prompt again after executing a command.
+ * the "exit" command, and displaying the
+ * prompt again after executing a command.
  * It also handles the end-of-file condition (Ctrl+D) and displays an error
  * message if there's an error executing a command.
  *
@@ -56,5 +57,5 @@ int main(void)
 		}
 	}
 
-	return EXIT_SUCCESS;
+	return (EXIT_SUCCESS);
 }
