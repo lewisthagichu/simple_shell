@@ -13,25 +13,25 @@
  */
 char *read_input(void)
 {
-    char *input = NULL;
-    ssize_t input_size = 0;
+char *input = NULL;
+ssize_t input_size = 0;
 
-    if (getline(&input, &input_size, stdin) == -1)
-    {
-        if (feof(stdin))
-        {
-            free(input);
-            return NULL;
-        }
-        else
-        {
-            perror("getline");
-            exit(EXIT_FAILURE);
-        }
-    }
+if (getline(&input, &input_size, stdin) == -1)
+{
+	if (feof(stdin))
+	{
+		free(input);
+		return (NULL);
+	}
+	else
+	{
+		perror("getline");
+		exit(EXIT_FAILURE);
+	}
+}
 
-    input[strcspn(input, "\n")] = '\0';
-    return input;
+input[strcspn(input, "\n")] = '\0';
+return (input);
 }
 
 /**
@@ -43,5 +43,5 @@ char *read_input(void)
 char *process_input(char *input)
 {
     /* Add any additional processing logic here if needed */
-    return input;
+	return (input);
 }
