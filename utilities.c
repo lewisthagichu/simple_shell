@@ -9,7 +9,7 @@
  */
 void print_error(char *msg)
 {
-    perror(msg);
+	perror(msg);
 }
 
 /**
@@ -17,14 +17,13 @@ void print_error(char *msg)
  */
 void print_env(void)
 {
-    extern char **environ;
-    char **env = environ;
+	char **env = environ_ptr();
 
-    while (*env)
-    {
-        printf("%s\n", *env);
-        env++;
-    }
+	while (*env)
+	{
+	printf("%s\n", *env);
+	env++;
+	}
 }
 
 /**
@@ -35,11 +34,11 @@ void print_env(void)
  */
 int change_directory(char *path)
 {
-    int ret;
+	int ret;
 
-    ret = chdir(path);
-    if (ret == -1)
-        print_error("cd");
+	ret = chdir(path);
+	if (ret == -1)
+	print_error("cd");
 
-    return ret;
+	return (ret);
 }
