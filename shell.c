@@ -36,12 +36,11 @@ int execute_command(char *command)
 	if (child_pid < 0)
 	{
 		perror("fork");
-		return -1;
+		return (-1);
 	}
 
 	if (child_pid == 0)
 	{
-		/* Child process */
 		if (execvp(args[0], args) == -1)
 		{
 			perror("execvp");
@@ -50,11 +49,10 @@ int execute_command(char *command)
 	}
 	else
 	{
-		/* Parent process */
 		do {
 			wait_pid = waitpid(child_pid, &status, WUNTRACED);
 		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
 
-	return 0;
+	return (0);
 }
