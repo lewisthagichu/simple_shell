@@ -4,8 +4,7 @@
 /* Function Declarations */
 
 /* main.c */
-void display_prompt(void);
-char *read_command(void);
+int main(void);
 
 /* shell.c */
 int execute_command(char *command);
@@ -16,11 +15,12 @@ void print_env(void);
 int change_directory(char *path);
 
 /* input.c */
-char *read_input(char *void);
-void *process_input(char *input);
+char *read_input(void);
+char *process_input(char *input);
 
 /* execution.c */
-int execute_command(char *command);
+int execute_command2(char **command);
+int execute_external_command(char *command);
 
 /* builtins.c */
 void shell_exit(void);

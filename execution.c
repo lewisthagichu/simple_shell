@@ -3,7 +3,25 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <string.h>
 #include "shell.h"
+
+/**
+ * execute_command - Execute a non-built-in command
+ * @command: The command to execute
+ *
+ * Return: 0 on success, -1 on error
+ */
+int execute_command2(char **command)
+{
+	if (strcmp(command[0], "exit") == 0)
+	{
+	shell_exit();
+	return (0);
+	}
+
+	return (-1);
+}
 
 /**
  * execute_command - Execute a command in the shell
@@ -11,7 +29,7 @@
  *
  * Return: 0 on success, -1 on failure
  */
-int execute_command(char *command)
+int execute_external_command(char *command)
 {
 	pid_t pid;
 	int status;
