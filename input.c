@@ -14,7 +14,7 @@
 char *read_input(void)
 {
 char *input = NULL;
-ssize_t input_size = 0;
+size_t input_size = 0;
 
 if (getline(&input, &input_size, stdin) == -1)
 {

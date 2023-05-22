@@ -17,7 +17,8 @@ void print_error(char *msg)
  */
 void print_env(void)
 {
-	char **env = environ_ptr();
+	extern char **environ;
+	char **env = environ;
 
 	while (*env)
 	{

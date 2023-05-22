@@ -17,7 +17,8 @@ void shell_exit(void)
  */
 void shell_env(void)
 {
-	char **env = environ_ptr();
+	extern char **environ;
+	char **env = environ;
 
 	while (*env)
 	{

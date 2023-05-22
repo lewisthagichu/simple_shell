@@ -8,18 +8,19 @@ void display_prompt(void);
 char *read_command(void);
 
 /* shell.c */
-void execute_command(char *command);
+int execute_command(char *command);
 
 /* utilities.c */
-void handle_error(char *message);
+void print_error(char *message);
+void print_env(void);
+int change_directory(char *path);
 
 /* input.c */
-char **tokenize_input(char *input);
-void free_tokens(char **tokens);
+char *read_input(char *void);
+void *process_input(char *input);
 
 /* execution.c */
-void execute_external_command(char **args);
-void execute_builtin_command(char **args);
+int execute_command(char *command);
 
 /* builtins.c */
 void shell_exit(void);

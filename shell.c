@@ -18,7 +18,7 @@ int execute_command(char *command)
 	char *args[MAX_ARGS];
 	char *token;
 	int i = 0;
-	pid_t child_pid, wait_pid;
+	pid_t child_pid;
 	int status;
 
 	/* Tokenize the command */
@@ -50,7 +50,7 @@ int execute_command(char *command)
 	else
 	{
 		do {
-			wait_pid = waitpid(child_pid, &status, WUNTRACED);
+			waitpid(child_pid, &status, WUNTRACED);
 		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
 

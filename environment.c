@@ -1,16 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "shell.h"
-
-/**
- * environ_ptr - Get a pointer to the environment variables
- *
- * Return: A pointer to the array of environment variables
- */
-char **environ_ptr(void)
-{
-	return (environ);
-}
+#include <string.h>
 
 /**
  * get_env_var - Get the value of an environment variable
@@ -20,21 +11,15 @@ char **environ_ptr(void)
  */
 char *get_env_var(char *name)
 {
-	char **env = environ_ptr();
-	char *var, *value;
-	size_t name_len;
+	extern char **environ;
+	char **env = environ;
+	size_t name_len = strlen(name);
 
-	name_len = strlen(name);
 	while (*env)
 	{
-	var = *env;
-	value = strchr(var, '=');
-
-	if (value && (size_t)(value - var) == name_len
-			&& strncmp(var, name, name_len) == 0)
-		return (value + 1);
-
-	env++;
+		if (strncmp(*env, name, name_len) == 0 && (*env)[name_len] == '=')
+		return (&(*env)[name_len + 1]);
+		env++;
 	}
 
 	return (NULL);

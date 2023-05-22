@@ -26,7 +26,11 @@ int execute_command(char *command)
 	if (pid == 0)
 	{
 		/* Child process */
-		char *args[] = {"/bin/sh", "-c", command, NULL};
+		char *args[4];
+		args[0] = "/bin/sh";
+		args[1] = "-c";
+		args[2] = command;
+		args[3] = NULL;
 
 		if (execvp(args[0], args) == -1)
 		{
