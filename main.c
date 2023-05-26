@@ -1,61 +1,69 @@
-/**
- * main - Entry point of the shell program
- *
- * Description: This program implements a simple shell where it displays a
- * prompt, reads user input, and executes commands entered by the user. It
- * supports basic functionality such as executing built-in commands, handling
- * the "exit" command, and displaying the
- * prompt again after executing a command.
- * It also handles the end-of-file condition (Ctrl+D) and displays an error
- * message if there's an error executing a command.
- *
- * Return: Always returns 0.
- */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/wait.h>
 #include "shell.h"
 
-#define MAX_INPUT_LENGTH 1024
-
-int main(void)
+/**
+ * free_data - frees the data structure
+ * @datash: data structure
+ * Return: no return
+ */
+void free_data(data_shell *datash)
 {
-	char input[MAX_INPUT_LENGTH];
-	int status;
+	unsigned int i;
 
-	while (1)
+	for (i = 0; datash->_environ[i]; i++)
 	{
-		printf("$ ");
-
-		if (fgets(input, sizeof(input), stdin) == NULL)
-		{
-			if (feof(stdin))
-			{
-				printf("\n");
-				break;
-			}
-			else
-			{
-				perror("fgets");
-				exit(EXIT_FAILURE);
-			}
-		}
-
-		input[strcspn(input, "\n")] = '\0';
-
-		if (input[0] == '\0')
-			continue;
-
-		status = execute_command(input);
-		if (status == -1)
-		{
-			fprintf(stderr, "Error executing the command.\n");
-			exit(EXIT_FAILURE);
-		}
+		free(datash->_environ[i]);
 	}
 
-	return (EXIT_SUCCESS);
+	free(datash->_environ);
+	free(datash->pid);
+}
+
+/**
+ * set_data - Initialize data structure
+ * @datash: data structure
+ * @agv: argument vector
+ * Return: no return
+ */
+void set_data(data_shell *datash, char **agv)
+{
+	unsigned int i;
+
+	datash->agv = agv;
+	datash->input = NULL;
+	datash->agc = NULL;
+	datash->status = 0;
+	datash->counter = 1;
+
+	for (i = 0; environ[i]; i++)
+		;
+
+	datash->_environ = malloc(sizeof(char *) * (i + 1));
+
+	for (i = 0; environ[i]; i++)
+	{
+		datash->_environ[i] = _strdup(environ[i]);
+	}
+
+	datash->_environ[i] = NULL;
+	datash->pid = _itoa(getpid());
+}
+
+/**
+ * main - Entry point
+ * @agc: argument count
+ * @agv: argument vector
+ * Return: 0 on success.
+ */
+int main(int agc, char **agv)
+{
+	data_shell datash;
+	(void) agc;
+
+	signal(SIGINT, get_sigint);
+	set_data(&datash, agv);
+	shell_loop(&datash);
+	free_data(&datash);
+	if (datash.status < 0)
+		return (255);
+	return (datash.status);
 }

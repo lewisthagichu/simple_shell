@@ -1,50 +1,28 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 #include "shell.h"
 
 /**
- * shell_exit - Exit the shell program
+ * get_builtIn - builtin the command in the arg
+ * @cmd: command
+ * Return: function pointer of the builtin command
  */
-void shell_exit(void)
+int (*get_builtIn(char *cmd))(data_shell *)
 {
-	exit(EXIT_SUCCESS);
-}
+	builtin_t builtin[] = {
+		{ "env", _env },
+		{ "exit", exit_shell },
+		{ "setenv", _setenv },
+		{ "unsetenv", _unsetenv },
+		{ "cd", cd_shell },
+		{ "help", get_helper },
+		{ NULL, NULL }
+	};
+	int i;
 
-/**
- * shell_env - Print the current environment variables
- */
-void shell_env(void)
-{
-	extern char **environ;
-	char **env = environ;
-
-	while (*env)
+	for (i = 0; builtin[i].name; i++)
 	{
-	printf("%s\n", *env);
-	env++;
-	}
-}
-
-/**
- * execute_builtin - Execute a built-in command
- * @command: The command to execute
- *
- * Return: 1 if the command is a built-in, 0 otherwise
- */
-int execute_builtin(char *command)
-{
-	if (strcmp(command, "exit") == 0)
-	{
-	shell_exit();
-	return (1);
-	}
-	else if (strcmp(command, "env") == 0)
-	{
-	shell_env();
-	return (1);
+		if (_strcmp(builtin[i].name, cmd) == 0)
+			break;
 	}
 
-	return (0);
+	return (builtin[i].f);
 }

@@ -1,56 +1,41 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 #include "shell.h"
-
 /**
- * tokenize_input - Tokenize the input command into arguments
- * @input: The input command string
- *
- * Return: An array of pointers to the arguments
+ * tokenize - this function separate the string using a designed delimiter
+ * @data: a pointer to the program's data
+ * Return: an array of the different parts of the string
  */
-char **tokenize_input(char *input)
+void tokenize(data_of_program *data)
 {
-	const char *delimiters = " \t\n";
-	char **tokens = NULL;
-	char *token;
-	int num_tokens = 0;
+	char *delimiter = " \t";
+	int i, j, counter = 2, length;
 
-	token = strtok(input, delimiters);
-	while (token)
+	length = str_length(data->input_line);
+	if (length)
 	{
-	num_tokens++;
-	tokens = realloc(tokens, sizeof(char *) * num_tokens);
-
-	if (tokens == NULL)
-	{
-		perror("realloc");
-		exit(EXIT_FAILURE);
+		if (data->input_line[length - 1] == '\n')
+			data->input_line[length - 1] = '\0';
 	}
 
-	tokens[num_tokens - 1] = token;
-	token = strtok(NULL, delimiters);
-	}
-
-	num_tokens++;
-	tokens = realloc(tokens, sizeof(char *) * num_tokens);
-	if (tokens == NULL)
+	for (i = 0; data->input_line[i]; i++)
 	{
-	perror("realloc");
-	exit(EXIT_FAILURE);
+		for (j = 0; delimiter[j]; j++)
+		{
+			if (data->input_line[i] == delimiter[j])
+				counter++;
+		}
 	}
-	tokens[num_tokens - 1] = NULL;
 
-	return (tokens);
-}
-
-/**
- * free_tokens - Free the memory allocated for the token array
- * @tokens: The array of tokens
- */
-void free_tokens(char **tokens)
-{
-	if (tokens)
-	free(tokens);
+	data->tokens = malloc(counter * sizeof(char *));
+	if (data->tokens == NULL)
+	{
+		perror(data->program_name);
+		exit(errno);
+	}
+	i = 0;
+	data->tokens[i] = str_duplicate(_strtok(data->input_line, delimiter));
+	data->command_name = str_duplicate(data->tokens[0]);
+	while (data->tokens[i++])
+	{
+		data->tokens[i] = str_duplicate(_strtok(NULL, delimiter));
+	}
 }
